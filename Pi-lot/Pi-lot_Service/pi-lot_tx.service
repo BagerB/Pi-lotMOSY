@@ -1,0 +1,11 @@
+[Unit]
+Description=Pi-lot TX
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/opt/Pi-lot/Pi-lot
+
+[Install]
+WantedBy=multi-user.target
