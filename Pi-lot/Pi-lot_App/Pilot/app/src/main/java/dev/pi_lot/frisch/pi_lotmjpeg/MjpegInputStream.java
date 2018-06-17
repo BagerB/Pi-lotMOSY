@@ -50,6 +50,7 @@ public class MjpegInputStream extends DataInputStream {
         super(new BufferedInputStream(in, FRAME_MAX_LENGTH));
     }
 
+    // get End of Sequence
     private int getEndOfSequence(DataInputStream in, byte[] sequence) throws IOException {
         int seqIndex = 0;
         byte c;
@@ -63,11 +64,13 @@ public class MjpegInputStream extends DataInputStream {
         return -1;
     }
 
+    //get Start of Sequence
     private int getStartOfSequence(DataInputStream in, byte[] sequence) throws IOException {
         int end = getEndOfSequence(in, sequence);
         return (end < 0) ? (-1) : (end - sequence.length);
     }
 
+    //parsing the Content length
     private int parseContentLength(byte[] headerBytes) throws IOException, NumberFormatException {
         headerIn = new ByteArrayInputStream(headerBytes);
         props = new Properties();

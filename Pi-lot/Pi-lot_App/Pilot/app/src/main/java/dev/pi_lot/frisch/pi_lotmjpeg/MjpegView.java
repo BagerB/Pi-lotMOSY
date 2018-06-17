@@ -41,6 +41,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
             mSurfaceHolder = surfaceHolder;
         }
 
+        //Setting up size of surface
         public void setSurfaceSize(int width, int height) {
             synchronized (mSurfaceHolder) {
                 dispWidth = width;
@@ -54,6 +55,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
 
+        //Draw leftRect and rightRect
         public void run() {
             mainRect = mainRect();
             leftRect = leftRect();
@@ -96,25 +98,30 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         dispHeight = getHeight();
     }
 
+    //Start Playback
     public void startPlayback() {
         mediaRun = true;
         thread.start();
     }
 
+    //Stop Playback
     public void stopPlayback() {
         mediaRun = false;
         thread.interrupt();
     }
+
 
     public MjpegView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
+    //Method to change surface
     public void surfaceChanged(SurfaceHolder holder, int f, int w, int h) {
         thread.setSurfaceSize(w, h);
     }
 
+    //Method to destroy surface
     public void surfaceDestroyed(SurfaceHolder holder) {
         surfaceDone = false;
         stopPlayback();
@@ -125,21 +132,25 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         init(context);
     }
 
+    //Surface created
     public void surfaceCreated(SurfaceHolder holder) {
         surfaceDone = true;
     }
 
+    //setting sourceURL
     public void setSource(String sourceUrl) {
         this.sourceUrl = sourceUrl;
         startPlayback();
     }
 
+    //set Resolution
     public void setResolution(int width, int height) {
         this.resolutionWidth = width;
         this.resolutionHeight = height;
         resolutionHeightOffset = -(resolutionHeight / 2);
     }
 
+    //adds WidthOffset
     public void addWidthOffset(int add) {
         if (resolutionWidthOffset < dispWidth / 2 - resolutionWidth && doubleImageMode) {
             resolutionWidthOffset = resolutionWidthOffset + add;
@@ -148,6 +159,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    //subtract WidthOffset
     public void subWidthOffset(int sub) {
         if (resolutionWidthOffset > 0 && doubleImageMode) {
             resolutionWidthOffset = resolutionWidthOffset - sub;
@@ -156,16 +168,18 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    //Toggle DoubleImageMode
     public void toggleDoubleImageMode() {
         doubleImageMode = !doubleImageMode;
     }
 
+    //return new Rect
     private Rect mainRect() {
         return new Rect(0, 0, dispWidth, dispHeight);
     }
 
+    //init leftRect
     private Rect leftRect() {
-
         int widthCenter = dispWidth / 2;
         int heightCenter = dispHeight / 2;
         int left = widthCenter - resolutionWidth - resolutionWidthOffset;
@@ -173,9 +187,9 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         int top = heightCenter + resolutionHeightOffset;
         int bottom = heightCenter + resolutionHeightOffset + resolutionHeight;
         return new Rect(left, top, right, bottom);
-
     }
 
+    //init rightRect
     private Rect rightRect() {
         int widthCenter = dispWidth / 2;
         int heightCenter = dispHeight / 2;
@@ -186,6 +200,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         return new Rect(left, top, right, bottom);
     }
 
+    //check display size
     private void checkdispsize() {
         if (initrun == true) {
             if (dispWidth < 1620 || dispHeight < 780) {

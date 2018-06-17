@@ -30,12 +30,14 @@ public class MainActivity extends AppCompatActivity {
         joystickUdpSocket.start();
     }
 
+    //Starting the JoystickUDPSocket
     @Override
     protected void onStart() {
         super.onStart();
         joystickUdpSocket.startRunning();
     }
 
+    //Stops the JoystickUDPSocket
     @Override
     protected void onStop() {
         super.onStop();
@@ -43,32 +45,38 @@ public class MainActivity extends AppCompatActivity {
         System.exit(0);
     }
 
+    //Assign PS3-Controller and Smartphone Keys
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         action = event.getAction();
         keyCode = event.getKeyCode();
 
         switch (keyCode) {
+            //KEYCODE_VOLUME_UP (Smartphone) to move the mjpegView to the edge for the eye distance
             case KeyEvent.KEYCODE_VOLUME_UP:
                 if (action == KeyEvent.ACTION_DOWN) {
                     mjpegView.addWidthOffset(5);
                 }
                 return true;
+            //KEYCODE_VOLUME_DOWN (Smartphone) to move the mjpegView inwards for the eye distance
             case KeyEvent.KEYCODE_VOLUME_DOWN:
                 if (action == KeyEvent.ACTION_DOWN) {
                     mjpegView.subWidthOffset(5);
                 }
                 return true;
+            //KEYCODE_BUTTON_R1 (Controller) to move the mjpegView to the edge for the eye distance
             case KeyEvent.KEYCODE_BUTTON_R1:
                 if (action == KeyEvent.ACTION_DOWN) {
                     mjpegView.addWidthOffset(5);
                 }
                 return true;
+            //KEYCODE_BUTTON_L1 (Controller) to move the mjpegView inwards for the eye distance
             case KeyEvent.KEYCODE_BUTTON_L1:
                 if (action == KeyEvent.ACTION_DOWN) {
                     mjpegView.subWidthOffset(5);
                 }
                 return true;
+            //KEY_BUTTON_SELECT_ (Controller) to toggle fullscreen on the Smartphone
             case KeyEvent.KEYCODE_BUTTON_SELECT:
                 if (action == KeyEvent.ACTION_DOWN) {
                     mjpegView.toggleDoubleImageMode();
@@ -78,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 return super.dispatchKeyEvent(event);
         }
     }
-
+    //Describes joystick movements
     @Override
     public boolean onGenericMotionEvent(MotionEvent event) {
         if ((event.getSource() & InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK &&
@@ -89,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onGenericMotionEvent(event);
     }
 
-
+    //Setting up PS3-Controller-Buttons
     private void processJoystickInput(MotionEvent event, int historyPos) {
         mInputDevice = event.getDevice();
 
@@ -101,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         joystickUdpSocket.setControls(joySteer, joyLook, joyGas, joyBrake);
     }
 
+    //Getting centered axis
     private static float getCenteredAxis(MotionEvent event, InputDevice device, int axis, int historyPos) {
         final InputDevice.MotionRange range = device.getMotionRange(axis, event.getSource());
         if (range != null) {

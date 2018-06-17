@@ -67,6 +67,7 @@ public class JoystickUdpSocket extends Thread {
         }
     }
 
+    //Set Controls
     public void setControls(float joySteer, float joyLook, float joyGas, float joyBrake) {
         this.joySteer = joySteer;
         this.joyLook = joyLook;
