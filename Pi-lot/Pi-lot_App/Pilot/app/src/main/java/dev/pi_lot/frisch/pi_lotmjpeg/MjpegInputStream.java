@@ -1,5 +1,6 @@
 package dev.pi_lot.frisch.pi_lotmjpeg;
 
+//Importieren von Java-Pakete
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -14,7 +15,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Properties;
 
+//MjpegInputStream erweitert DataInputStream
 public class MjpegInputStream extends DataInputStream {
+	//Variablen definieren
     private final byte[] SOI_MARKER = {(byte) 0xFF, (byte) 0xD8};
     private final byte[] EOF_MARKER = {(byte) 0xFF, (byte) 0xD9};
     private final String CONTENT_LENGTH = "Content-Length";
