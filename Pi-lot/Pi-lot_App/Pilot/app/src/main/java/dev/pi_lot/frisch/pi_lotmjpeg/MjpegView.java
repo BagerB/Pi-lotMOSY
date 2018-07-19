@@ -1,6 +1,5 @@
 package dev.pi_lot.frisch.pi_lotmjpeg;
 
-//Importieren von Java-Pakete
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -14,9 +13,7 @@ import android.view.SurfaceView;
 
 import java.io.IOException;
 
-//Klasse MjpegView erweitert SurfaceView und implementiert SurfaceHolder.Callback
 public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
-	//Variablen definieren
     private MjpegViewThread thread;
     private MjpegInputStream mjpegInputStream = null;
     private String sourceUrl;
@@ -37,11 +34,9 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
     private Paint paint;
     boolean initrun = true;
 
-	//Klasse MjpegViewThread erweitert Thread
     public class MjpegViewThread extends Thread {
         private SurfaceHolder mSurfaceHolder;
 
-		//MjpegViewThread mit SurfaceHolder, surfaceHolder, context
         public MjpegViewThread(SurfaceHolder surfaceHolder, Context context) {
             mSurfaceHolder = surfaceHolder;
         }
@@ -60,7 +55,6 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
 
-		//Run-Methode
         public void run() {
             mainRect = mainRect();
             leftRect = leftRect();
@@ -82,7 +76,6 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
                                     canvas.drawColor(Color.BLACK);
                                     canvas.drawBitmap(bitmap, null, leftRect, paint);
                                     canvas.drawBitmap(bitmap, null, rightRect, paint);
-								  //	
                                 } else {
                                     canvas.drawBitmap(bitmap, null, mainRect, paint);
                                 }
@@ -121,7 +114,6 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         thread.interrupt();
     }
 
-	//read only: Context und AttributeSet
     public MjpegView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
@@ -138,7 +130,6 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         stopPlayback();
     }
 
-	//read only: Context
     public MjpegView(Context context) {
         super(context);
         init(context);
@@ -162,7 +153,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         resolutionHeightOffset = -(resolutionHeight / 2);
     }
 
-	//Addition der Auflösungsbreite mit einem Offset
+	//Doppelbilder nach Außen bewegen
     public void addWidthOffset(int add) {
         if (resolutionWidthOffset < dispWidth / 2 - resolutionWidth && doubleImageMode) {
             resolutionWidthOffset = resolutionWidthOffset + add;
@@ -171,7 +162,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-	//Subtraktion der Auflösungsbreite mit einem Offset
+	//Doppelbilder nach Innen bewegen
     public void subWidthOffset(int sub) {
         if (resolutionWidthOffset > 0 && doubleImageMode) {
             resolutionWidthOffset = resolutionWidthOffset - sub;
@@ -190,7 +181,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         return new Rect(0, 0, dispWidth, dispHeight);
     }
 
-	//Linkes Rechteck
+	//Linkes Bild des Doppelbild-Modus
     private Rect leftRect() {
 
         int widthCenter = dispWidth / 2;
@@ -203,7 +194,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
 
     }
 	
-	//Rechtes Rechteck
+	//Rechtes Bild des Doppelbild-Modus
     private Rect rightRect() {
         int widthCenter = dispWidth / 2;
         int heightCenter = dispHeight / 2;
@@ -214,7 +205,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         return new Rect(left, top, right, bottom);
     }
 
-	//Prüft die Anzeigegröße
+	//Prüft die Anzeigegröße und setzt diese bei kleiner Auflösung auf die Hälfte der Grundeinstellung
     private void checkdispsize() {
         if (initrun == true) {
             if (dispWidth < 1620 || dispHeight < 780) {

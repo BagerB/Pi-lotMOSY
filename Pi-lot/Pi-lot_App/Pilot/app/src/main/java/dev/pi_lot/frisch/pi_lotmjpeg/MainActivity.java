@@ -1,6 +1,5 @@
 package dev.pi_lot.frisch.pi_lotmjpeg;
 
-//Importieren von Java-Pakete
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.InputDevice;
@@ -9,9 +8,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
-//MainActivity erweitert AppCompatActivity
+
 public class MainActivity extends AppCompatActivity {
-	//Variablen definieren
     private MjpegView mjpegView;
     private InputDevice mInputDevice;
     private JoystickUdpSocket joystickUdpSocket;
@@ -22,7 +20,9 @@ public class MainActivity extends AppCompatActivity {
     private float joyGas;
     private float joyBrake;
 
-	//Initialisierung der Activity mit der UI (mjpegView) / Setzt die Quelle für mjpegView und joystickUdpSocket
+	//Initialisierung der Activity mit der UI (mjpegView) 
+	//Setzt die Quelle für mjpegView
+	//Setzt das Ziel für den joystickUdpSocket
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         joystickUdpSocket.startRunning();
     }
 
-	//Beim Schließen der App wird der JoystickUdpSocket gestoppt
+	//Bei Unterbrechung der App wird der JoystickUdpSocket gestoppt und die App beendet
     @Override
     protected void onStop() {
         super.onStop();
@@ -70,21 +70,21 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
 				
-			//Am Playstation 3 Controller: Die R1-Taste vergrößert den Abstand der Bilder
+			//Am Joystick: Die R1-Taste vergrößert den Abstand der Bilder
             case KeyEvent.KEYCODE_BUTTON_R1:
                 if (action == KeyEvent.ACTION_DOWN) {
                     mjpegView.addWidthOffset(5);
                 }
                 return true;
 				
-			//Am Playstation 3 Controller: Die L1-Taste verkleinert den Abstand der Bilder
+			//Am Joystick: Die L1-Taste verkleinert den Abstand der Bilder
             case KeyEvent.KEYCODE_BUTTON_L1:
                 if (action == KeyEvent.ACTION_DOWN) {
                     mjpegView.subWidthOffset(5);
                 }
                 return true;
 				
-			//Am Playstation 3 Controller: Der Select-Knopf löst den Vollbild-Modus aus
+			//Am Joystick: Der Select-Knopf wechselt zwischen dem Vollbild-Modus und dem Doppelbild-Modus
             case KeyEvent.KEYCODE_BUTTON_SELECT:
                 if (action == KeyEvent.ACTION_DOWN) {
                     mjpegView.toggleDoubleImageMode();
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-	//Gibt True zurück wenn ein Joysticksignal empfangen wird
+	//Nimmt das event des Joysticks entgegen
     @Override
     public boolean onGenericMotionEvent(MotionEvent event) {
         if ((event.getSource() & InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK &&
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onGenericMotionEvent(event);
     }
 
-	//Verarbeitet die Joystickeingänge
+	//Übergibt die ausgelesenen Werte des Joysticks an den JoystickUdpSocket
     private void processJoystickInput(MotionEvent event, int historyPos) {
         mInputDevice = event.getDevice();
 
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         return 0;
     }
 
-	//Erstellt die Benutzeroberfläche
+	//Versteckt das Android-UI 
     private void setSystemUI() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 

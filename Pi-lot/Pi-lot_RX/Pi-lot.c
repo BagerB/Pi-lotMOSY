@@ -1,4 +1,3 @@
-//Importieren von C-Pakete
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
@@ -7,17 +6,17 @@
 
 #include <pigpio.h>
 
-//Konstanten
-#define BUFLEN 32
-#define PORT 8888
-#define SERVOCENTER 1500
-#define SERVORANGE 500
-#define PINGAS 16
-#define PINSTEER 20
-#define PINLOOK 21
+#define BUFLEN 32			//UDP BufferSize
+#define PORT 8888			//UDP Port
+#define SERVOCENTER 1500	//Neutrale Position der Servos
+#define SERVORANGE 500		//Maximaler Servoausschlag
+#define PINGAS 16			//GPIO-Pin des Raspberry Pi's für den Motor
+#define PINSTEER 20			//GPIO-Pin des Raspberry Pi's für den Lenkservo
+#define PINLOOK 21			//GPIO-Pin des Raspberry Pi's für den Kameraservo
 
 #define DEBUG 0
 
+//Cast von 4 ByteArray zu Float
 union rcdata{
 	unsigned char c[3];
 	float f;
@@ -28,7 +27,6 @@ int main(void)
     struct sockaddr_in si_me, si_other;
     struct timeval read_timeout;
 
-	//rcd_steer, rcd_look, rcd_gas, rcd_brake werden definiert
     union rcdata rcd_steer;
     union rcdata rcd_look;
     union rcdata rcd_gas;
@@ -43,6 +41,7 @@ int main(void)
 
     printf("Pi-Lot RX\n\n");
 
+	//Initialisierung der pigpio library
     if (gpioInitialise() < 0)
     {
     	printf("pigpio error\n");
@@ -51,6 +50,7 @@ int main(void)
     	printf("pigpio initialised\n");
     }
 
+	//Initialisierung des UDP-Socket
     if ((s=socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
     {
     	printf("Socket error\n");
@@ -59,7 +59,7 @@ int main(void)
     	printf("Socket created\n");
     }
 
-    //stellt timeout ein
+    //Setzt die Optionen für den UDP-Socket (Timeout aktiviert)
     setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, &read_timeout, sizeof read_timeout);
 
     
@@ -81,7 +81,7 @@ int main(void)
     {
         fflush(stdout);
 
-        
+        //Bei Timeout werden alle Werte auf Null gesetzt (Motor aus, neutrale Position der Servos)
         if ((recv_len = recvfrom(s, buf, BUFLEN, 0, (struct sockaddr *) &si_other, &slen)) == -1)
         {
         	rcd_steer.f = 0.0;
@@ -89,28 +89,28 @@ int main(void)
         	rcd_gas.f = 0.0;
         	rcd_brake.f = 0.0;
         } else {
-        	rcd_steer.c[0] = buf[0];	//Eintrag 0 - 3 im buf löst die Lenkung aus
+        	rcd_steer.c[0] = buf[0];
         	rcd_steer.c[1] = buf[1];
         	rcd_steer.c[2] = buf[2];
         	rcd_steer.c[3] = buf[3];
 
-        	rcd_look.c[0] = buf[4];		//Eintrag 4 - 7 im buf löst den Servo für die Kamerahalterung aus
+        	rcd_look.c[0] = buf[4];
         	rcd_look.c[1] = buf[5];
         	rcd_look.c[2] = buf[6];
         	rcd_look.c[3] = buf[7];
 
-        	rcd_gas.c[0] = buf[8];		//Eintrag 8 - 11 im buf lässt den Wagen fahren
+        	rcd_gas.c[0] = buf[8];		
         	rcd_gas.c[1] = buf[9];
         	rcd_gas.c[2] = buf[10];
         	rcd_gas.c[3] = buf[11];
 
-        	rcd_brake.c[0] = buf[12];	//Eintrag 12 - 15 löst die Bremse bzw. den Rückwärtsgang aus 
+        	rcd_brake.c[0] = buf[12];
         	rcd_brake.c[1] = buf[13];
         	rcd_brake.c[2] = buf[14];
         	rcd_brake.c[3] = buf[15];
         }
 
-		////Servoprogrammierung
+		//Setzt die Werte in Servopulssignale um
         gas = SERVOCENTER + ((SERVORANGE * rcd_gas.f)-(SERVORANGE * rcd_brake.f));
         steer = SERVOCENTER + SERVORANGE * rcd_steer.f;
         look = SERVOCENTER + SERVORANGE * rcd_look.f;
