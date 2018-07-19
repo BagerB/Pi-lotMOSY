@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private float joyGas;
     private float joyBrake;
 
-	//Initialisierung der Activity mit der UI (mjpegView) / Setzt die Quelle für mjpegViewund joystickUdpSocket
+	//Initialisierung der Activity mit der UI (mjpegView) / Setzt die Quelle für mjpegView und joystickUdpSocket
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-	//
+	//Gibt True zurück wenn ein Joysticksignal empfangen wird
     @Override
     public boolean onGenericMotionEvent(MotionEvent event) {
         if ((event.getSource() & InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK &&

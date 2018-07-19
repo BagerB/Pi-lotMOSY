@@ -1,5 +1,6 @@
 package dev.pi_lot.frisch.pi_lotmjpeg;
 
+//Importieren von Java-Pakete
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -13,7 +14,9 @@ import android.view.SurfaceView;
 
 import java.io.IOException;
 
+//Klasse MjpegView erweitert SurfaceView und implementiert SurfaceHolder.Callback
 public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
+	//Variablen definieren
     private MjpegViewThread thread;
     private MjpegInputStream mjpegInputStream = null;
     private String sourceUrl;
@@ -34,13 +37,16 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
     private Paint paint;
     boolean initrun = true;
 
+	//Klasse MjpegViewThread erweitert Thread
     public class MjpegViewThread extends Thread {
         private SurfaceHolder mSurfaceHolder;
 
+		//MjpegViewThread mit SurfaceHolder, surfaceHolder, context
         public MjpegViewThread(SurfaceHolder surfaceHolder, Context context) {
             mSurfaceHolder = surfaceHolder;
         }
 
+		//Stellt die Oberflächengröße ein
         public void setSurfaceSize(int width, int height) {
             synchronized (mSurfaceHolder) {
                 dispWidth = width;
@@ -54,6 +60,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
 
+		//Run-Methode
         public void run() {
             mainRect = mainRect();
             leftRect = leftRect();
@@ -64,14 +71,18 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
             while (mjpegInputStream != null && mediaRun) {
                 if (surfaceDone) {
                     try {
+						//Sperrt das Canvas
                         canvas = mSurfaceHolder.lockCanvas();
+						//Synchronisiert den mSurfaceHolder bis Bild reinkommt
                         synchronized (mSurfaceHolder) {
                             try {
                                 bitmap = mjpegInputStream.readMjpegFrame();
+								//Wenn Doppelbild
                                 if (doubleImageMode) {
                                     canvas.drawColor(Color.BLACK);
                                     canvas.drawBitmap(bitmap, null, leftRect, paint);
                                     canvas.drawBitmap(bitmap, null, rightRect, paint);
+								  //	
                                 } else {
                                     canvas.drawBitmap(bitmap, null, mainRect, paint);
                                 }
@@ -80,6 +91,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
                             }
                         }
                     } finally {
+						//Wenn canvas ungleich null, dann wird Canvas entsperrt
                         if (canvas != null)
                             mSurfaceHolder.unlockCanvasAndPost(canvas);
                     }
@@ -88,6 +100,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+	//Initialisierungen
     private void init(Context context) {
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
@@ -96,44 +109,53 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         dispHeight = getHeight();
     }
 
+	//Startet Wiedergabe
     public void startPlayback() {
         mediaRun = true;
         thread.start();
     }
 
+	//Stoppt Wiedergabe
     public void stopPlayback() {
         mediaRun = false;
         thread.interrupt();
     }
 
+	//read only: Context und AttributeSet
     public MjpegView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
+	//Bei Oberflächenveränderung
     public void surfaceChanged(SurfaceHolder holder, int f, int w, int h) {
         thread.setSurfaceSize(w, h);
     }
 
+	//Oberfläche "zerstört"
     public void surfaceDestroyed(SurfaceHolder holder) {
         surfaceDone = false;
         stopPlayback();
     }
 
+	//read only: Context
     public MjpegView(Context context) {
         super(context);
         init(context);
     }
 
+	//Oberfläche erstellt
     public void surfaceCreated(SurfaceHolder holder) {
         surfaceDone = true;
     }
-
+	
+	//URL-Quelle festlegen
     public void setSource(String sourceUrl) {
         this.sourceUrl = sourceUrl;
         startPlayback();
     }
 
+	//Auflösung definieren
     public void setResolution(int width, int height) {
         this.resolutionWidth = width;
         this.resolutionHeight = height;
