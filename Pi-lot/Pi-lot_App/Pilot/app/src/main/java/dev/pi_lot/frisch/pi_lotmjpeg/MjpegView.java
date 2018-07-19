@@ -41,7 +41,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
             mSurfaceHolder = surfaceHolder;
         }
 
-		//Stellt die Oberflächengröße ein
+        //Stellt die Oberflächengröße ein
         public void setSurfaceSize(int width, int height) {
             synchronized (mSurfaceHolder) {
                 dispWidth = width;
@@ -65,13 +65,13 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
             while (mjpegInputStream != null && mediaRun) {
                 if (surfaceDone) {
                     try {
-						//Sperrt das Canvas
+                        //Sperrt das Canvas
                         canvas = mSurfaceHolder.lockCanvas();
-						//Synchronisiert den mSurfaceHolder bis Bild reinkommt
+                        //Synchronisiert den mSurfaceHolder bis Bild reinkommt
                         synchronized (mSurfaceHolder) {
                             try {
                                 bitmap = mjpegInputStream.readMjpegFrame();
-								//Wenn Doppelbild
+                                //Wenn Doppelbild
                                 if (doubleImageMode) {
                                     canvas.drawColor(Color.BLACK);
                                     canvas.drawBitmap(bitmap, null, leftRect, paint);
@@ -84,7 +84,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
                             }
                         }
                     } finally {
-						//Wenn canvas ungleich null, dann wird Canvas entsperrt
+                        //Wenn canvas ungleich null, dann wird Canvas entsperrt
                         if (canvas != null)
                             mSurfaceHolder.unlockCanvasAndPost(canvas);
                     }
@@ -93,7 +93,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-	//Initialisierungen
+    //Initialisierungen
     private void init(Context context) {
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
@@ -102,13 +102,13 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         dispHeight = getHeight();
     }
 
-	//Startet Wiedergabe
+    //Startet Wiedergabe
     public void startPlayback() {
         mediaRun = true;
         thread.start();
     }
 
-	//Stoppt Wiedergabe
+    //Stoppt Wiedergabe
     public void stopPlayback() {
         mediaRun = false;
         thread.interrupt();
@@ -119,12 +119,12 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         init(context);
     }
 
-	//Bei Oberflächenveränderung
+    //Bei Oberflächenveränderung
     public void surfaceChanged(SurfaceHolder holder, int f, int w, int h) {
         thread.setSurfaceSize(w, h);
     }
 
-	//Oberfläche "zerstört"
+    //Oberfläche "zerstört"
     public void surfaceDestroyed(SurfaceHolder holder) {
         surfaceDone = false;
         stopPlayback();
@@ -135,25 +135,25 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         init(context);
     }
 
-	//Oberfläche erstellt
+    //Oberfläche erstellt
     public void surfaceCreated(SurfaceHolder holder) {
         surfaceDone = true;
     }
-	
-	//URL-Quelle festlegen
+
+    //URL-Quelle festlegen
     public void setSource(String sourceUrl) {
         this.sourceUrl = sourceUrl;
         startPlayback();
     }
 
-	//Auflösung definieren
+    //Auflösung definieren
     public void setResolution(int width, int height) {
         this.resolutionWidth = width;
         this.resolutionHeight = height;
         resolutionHeightOffset = -(resolutionHeight / 2);
     }
 
-	//Doppelbilder nach Außen bewegen
+    //Doppelbilder nach Außen bewegen
     public void addWidthOffset(int add) {
         if (resolutionWidthOffset < dispWidth / 2 - resolutionWidth && doubleImageMode) {
             resolutionWidthOffset = resolutionWidthOffset + add;
@@ -162,7 +162,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-	//Doppelbilder nach Innen bewegen
+    //Doppelbilder nach Innen bewegen
     public void subWidthOffset(int sub) {
         if (resolutionWidthOffset > 0 && doubleImageMode) {
             resolutionWidthOffset = resolutionWidthOffset - sub;
@@ -171,17 +171,17 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-	//Methode in den VollbildModus umzuschalten 
+    //Methode in den VollbildModus umzuschalten
     public void toggleDoubleImageMode() {
         doubleImageMode = !doubleImageMode;
     }
 
-	//Vollbild Rechteck
+    //Vollbild Rechteck
     private Rect mainRect() {
         return new Rect(0, 0, dispWidth, dispHeight);
     }
 
-	//Linkes Bild des Doppelbild-Modus
+    //Linkes Bild des Doppelbild-Modus
     private Rect leftRect() {
 
         int widthCenter = dispWidth / 2;
@@ -193,8 +193,8 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         return new Rect(left, top, right, bottom);
 
     }
-	
-	//Rechtes Bild des Doppelbild-Modus
+
+    //Rechtes Bild des Doppelbild-Modus
     private Rect rightRect() {
         int widthCenter = dispWidth / 2;
         int heightCenter = dispHeight / 2;
@@ -205,7 +205,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         return new Rect(left, top, right, bottom);
     }
 
-	//Prüft die Anzeigegröße und setzt diese bei kleiner Auflösung auf die Hälfte der Grundeinstellung
+    //Prüft die Anzeigegröße und setzt diese bei kleiner Auflösung auf die Hälfte der Grundeinstellung
     private void checkdispsize() {
         if (initrun == true) {
             if (dispWidth < 1620 || dispHeight < 780) {

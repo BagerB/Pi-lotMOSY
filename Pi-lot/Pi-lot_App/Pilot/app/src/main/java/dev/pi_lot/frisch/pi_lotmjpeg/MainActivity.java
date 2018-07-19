@@ -20,9 +20,9 @@ public class MainActivity extends AppCompatActivity {
     private float joyGas;
     private float joyBrake;
 
-	//Initialisierung der Activity mit der UI (mjpegView) 
-	//Setzt die Quelle für mjpegView
-	//Setzt das Ziel für den joystickUdpSocket
+    //Initialisierung der Activity mit der UI (mjpegView)
+    //Setzt die Quelle für mjpegView
+    //Setzt das Ziel für den joystickUdpSocket
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,14 +34,14 @@ public class MainActivity extends AppCompatActivity {
         joystickUdpSocket.start();
     }
 
-	//Beim Start der App, wird der JoystickUdpSocket gestartet
+    //Beim Start der App, wird der JoystickUdpSocket gestartet
     @Override
     protected void onStart() {
         super.onStart();
         joystickUdpSocket.startRunning();
     }
 
-	//Bei Unterbrechung der App wird der JoystickUdpSocket gestoppt und die App beendet
+    //Bei Unterbrechung der App wird der JoystickUdpSocket gestoppt und die App beendet
     @Override
     protected void onStop() {
         super.onStop();
@@ -49,42 +49,42 @@ public class MainActivity extends AppCompatActivity {
         System.exit(0);
     }
 
-	//Vergabe der Tasten für die Veränderung des mjpegView auf der App
+    //Vergabe der Tasten für die Veränderung des mjpegView auf der App
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         action = event.getAction();
         keyCode = event.getKeyCode();
-		
+
         switch (keyCode) {
-			//Am Mobiltelefon: Die Lautstärkeoben-Taste vergrößert den Abstand der Bilder
+            //Am Mobiltelefon: Die Lautstärkeoben-Taste vergrößert den Abstand der Bilder
             case KeyEvent.KEYCODE_VOLUME_UP:
                 if (action == KeyEvent.ACTION_DOWN) {
                     mjpegView.addWidthOffset(5);
                 }
                 return true;
-				
-			//Am Mobiltelefon: Die Lautstärkeunten-Taste verkleinert den Abstand der Bilder
+
+            //Am Mobiltelefon: Die Lautstärkeunten-Taste verkleinert den Abstand der Bilder
             case KeyEvent.KEYCODE_VOLUME_DOWN:
                 if (action == KeyEvent.ACTION_DOWN) {
                     mjpegView.subWidthOffset(5);
                 }
                 return true;
-				
-			//Am Joystick: Die R1-Taste vergrößert den Abstand der Bilder
+
+            //Am Joystick: Die R1-Taste vergrößert den Abstand der Bilder
             case KeyEvent.KEYCODE_BUTTON_R1:
                 if (action == KeyEvent.ACTION_DOWN) {
                     mjpegView.addWidthOffset(5);
                 }
                 return true;
-				
-			//Am Joystick: Die L1-Taste verkleinert den Abstand der Bilder
+
+            //Am Joystick: Die L1-Taste verkleinert den Abstand der Bilder
             case KeyEvent.KEYCODE_BUTTON_L1:
                 if (action == KeyEvent.ACTION_DOWN) {
                     mjpegView.subWidthOffset(5);
                 }
                 return true;
-				
-			//Am Joystick: Der Select-Knopf wechselt zwischen dem Vollbild-Modus und dem Doppelbild-Modus
+
+            //Am Joystick: Der Select-Knopf wechselt zwischen dem Vollbild-Modus und dem Doppelbild-Modus
             case KeyEvent.KEYCODE_BUTTON_SELECT:
                 if (action == KeyEvent.ACTION_DOWN) {
                     mjpegView.toggleDoubleImageMode();
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-	//Nimmt das event des Joysticks entgegen
+    //Nimmt das event des Joysticks entgegen
     @Override
     public boolean onGenericMotionEvent(MotionEvent event) {
         if ((event.getSource() & InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK &&
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onGenericMotionEvent(event);
     }
 
-	//Übergibt die ausgelesenen Werte des Joysticks an den JoystickUdpSocket
+    //Übergibt die ausgelesenen Werte des Joysticks an den JoystickUdpSocket
     private void processJoystickInput(MotionEvent event, int historyPos) {
         mInputDevice = event.getDevice();
 
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         joystickUdpSocket.setControls(joySteer, joyLook, joyGas, joyBrake);
     }
 
-	//Methode um zentrierte Achsen zu bekommen
+    //Methode um zentrierte Achsen zu bekommen
     private static float getCenteredAxis(MotionEvent event, InputDevice device, int axis, int historyPos) {
         final InputDevice.MotionRange range = device.getMotionRange(axis, event.getSource());
         if (range != null) {
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         return 0;
     }
 
-	//Versteckt das Android-UI 
+    //Versteckt das Android-UI
     private void setSystemUI() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
