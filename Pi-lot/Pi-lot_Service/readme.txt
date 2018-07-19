@@ -1,11 +1,15 @@
 install
-	sudo cp ./pi-lot_tx.service /etc/systemd/system/
-	
 
+
+sudo cp ./pi-lot_tx.service /etc/systemd/system/
+	
 sudo cp ./mjpg_streamer.service /etc/systemd/system/
+
+
 
 start
 	
+
 sudo systemctl daemon-reload
 	
 sudo systemctl enable pi-lot_tx.service
