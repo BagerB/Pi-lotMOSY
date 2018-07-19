@@ -8,8 +8,8 @@
 
 #define BUFLEN 32			//UDP BufferSize
 #define PORT 8888			//UDP Port
-#define SERVOCENTER 1500	//Neutrale Position der Servos
-#define SERVORANGE 500		//Maximaler Servoausschlag
+#define SERVOCENTER 1500		//Neutrale Position der Servos
+#define SERVORANGE 500			//Maximaler Servoausschlag
 #define PINGAS 16			//GPIO-Pin des Raspberry Pi's für den Motor
 #define PINSTEER 20			//GPIO-Pin des Raspberry Pi's für den Lenkservo
 #define PINLOOK 21			//GPIO-Pin des Raspberry Pi's für den Kameraservo
@@ -110,7 +110,7 @@ int main(void)
         	rcd_brake.c[3] = buf[15];
         }
 
-		//Setzt die Werte in Servopulssignale um
+	//Setzt die Werte in Servopulssignale um
         gas = SERVOCENTER + ((SERVORANGE * rcd_gas.f)-(SERVORANGE * rcd_brake.f));
         steer = SERVOCENTER + SERVORANGE * rcd_steer.f;
         look = SERVOCENTER + SERVORANGE * rcd_look.f;
