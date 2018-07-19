@@ -41,7 +41,7 @@ int main(void)
 
     printf("Pi-Lot RX\n\n");
 
-	//Initialisierung der pigpio library
+    //Initialisierung der pigpio library
     if (gpioInitialise() < 0)
     {
     	printf("pigpio error\n");
@@ -50,7 +50,7 @@ int main(void)
     	printf("pigpio initialised\n");
     }
 
-	//Initialisierung des UDP-Socket
+    //Initialisierung des UDP-Socket
     if ((s=socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
     {
     	printf("Socket error\n");
