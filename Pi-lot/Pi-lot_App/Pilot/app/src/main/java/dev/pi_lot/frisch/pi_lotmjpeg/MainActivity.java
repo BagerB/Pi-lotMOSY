@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private float joyGas;
     private float joyBrake;
 
-	//
+	//Initialisierung der Activity mit der UI (mjpegView) / Setzt die Quelle für mjpegViewund joystickUdpSocket
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onGenericMotionEvent(event);
     }
 
-	//
+	//Verarbeitet die Joystickeingänge
     private void processJoystickInput(MotionEvent event, int historyPos) {
         mInputDevice = event.getDevice();
 
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         joystickUdpSocket.setControls(joySteer, joyLook, joyGas, joyBrake);
     }
 
-	//
+	//Methode um zentrierte Achsen zu bekommen
     private static float getCenteredAxis(MotionEvent event, InputDevice device, int axis, int historyPos) {
         final InputDevice.MotionRange range = device.getMotionRange(axis, event.getSource());
         if (range != null) {
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         return 0;
     }
 
-	//
+	//Erstellt die Benutzeroberfläche
     private void setSystemUI() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 

@@ -140,6 +140,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         resolutionHeightOffset = -(resolutionHeight / 2);
     }
 
+	//Addition der Auflösungsbreite mit einem Offset
     public void addWidthOffset(int add) {
         if (resolutionWidthOffset < dispWidth / 2 - resolutionWidth && doubleImageMode) {
             resolutionWidthOffset = resolutionWidthOffset + add;
@@ -148,6 +149,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+	//Subtraktion der Auflösungsbreite mit einem Offset
     public void subWidthOffset(int sub) {
         if (resolutionWidthOffset > 0 && doubleImageMode) {
             resolutionWidthOffset = resolutionWidthOffset - sub;
@@ -156,14 +158,17 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+	//Methode in den VollbildModus umzuschalten 
     public void toggleDoubleImageMode() {
         doubleImageMode = !doubleImageMode;
     }
 
+	//Vollbild Rechteck
     private Rect mainRect() {
         return new Rect(0, 0, dispWidth, dispHeight);
     }
 
+	//Linkes Rechteck
     private Rect leftRect() {
 
         int widthCenter = dispWidth / 2;
@@ -175,7 +180,8 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         return new Rect(left, top, right, bottom);
 
     }
-
+	
+	//Rechtes Rechteck
     private Rect rightRect() {
         int widthCenter = dispWidth / 2;
         int heightCenter = dispHeight / 2;
@@ -186,6 +192,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         return new Rect(left, top, right, bottom);
     }
 
+	//Prüft die Anzeigegröße
     private void checkdispsize() {
         if (initrun == true) {
             if (dispWidth < 1620 || dispHeight < 780) {

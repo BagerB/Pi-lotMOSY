@@ -18,8 +18,8 @@ import java.util.Properties;
 //MjpegInputStream erweitert DataInputStream
 public class MjpegInputStream extends DataInputStream {
 	//Variablen definieren
-    private final byte[] SOI_MARKER = {(byte) 0xFF, (byte) 0xD8};
-    private final byte[] EOF_MARKER = {(byte) 0xFF, (byte) 0xD9};
+    private final byte[] SOI_MARKER = {(byte) 0xFF, (byte) 0xD8};				//Start der Aufzeichnung des Bildes
+    private final byte[] EOF_MARKER = {(byte) 0xFF, (byte) 0xD9};				//Ende der Aufzeichnung des Bildes
     private final String CONTENT_LENGTH = "Content-Length";
     private final static int HEADER_MAX_LENGTH = 100;
     private final static int FRAME_MAX_LENGTH = 40000 + HEADER_MAX_LENGTH;
@@ -32,8 +32,10 @@ public class MjpegInputStream extends DataInputStream {
     private byte[] header;
     private byte[] frameData;
 
+	
     public static MjpegInputStream read(String urlString) {
-
+		
+		
         try {
             url = new URL(urlString);
             c = url.openConnection();
